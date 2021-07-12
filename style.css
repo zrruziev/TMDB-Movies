@@ -1,0 +1,172 @@
+body {
+  background-color: rgb(110, 110, 110);
+}
+
+.navcolor {
+  background-color: rgb(49, 49, 49);
+}
+
+.movie {
+  background-color: rgb(46, 46, 46);
+}
+
+.tmdbmovies {
+  color: rgb(129, 255, 104);
+}
+
+.navbar-brand{
+  transition: .1s ;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.1);
+  color: rgb(129, 255, 104);
+  text-shadow: -1px -1px 20px rgb(152, 185, 60);
+}
+
+.card {
+  width: 235px;
+  height: 410px;
+}
+
+.card:hover {
+  border: none;
+}
+
+.btn:hover {
+  box-shadow: 1px 1px 5px 1px rgb(0, 0, 0) ;
+}
+
+.zrr {
+  display: inline-block;
+  transition: .1s;
+}
+
+.zrr:hover {
+  transform: scale(1.2) translateX(7px);
+  color: rgb(211, 211, 211);
+  font-weight: bold;
+  text-shadow: 1px 1px 10px rgb(7, 255, 81);
+}
+
+.card-img-overlay {
+  visibility: hidden;
+  border: 5px solid rgb(0, 184, 92); 
+}
+
+.card:hover .card-img-overlay{
+  visibility: visible;
+  z-index: 100;  
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  background-color: black;
+  width: 234px;
+  height: 409px;
+  opacity: .8;
+  visibility: hidden;  
+}
+
+.card:hover::after{
+  visibility: visible;
+}
+
+.card:hover .card-text {
+  animation-name: moveInTop;
+  animation-duration: .5s;
+}
+.card:hover .genres {
+  animation-name: moveInCenter;
+  animation-duration: .6s;
+}
+
+.card:hover .view {
+  animation-name: moveInBottom;
+  animation-duration: .5s;
+}
+
+.view:hover {
+  border-color: transparent;
+  box-shadow: 1px 1px 10px 1px rgb(214, 255, 234);
+  background-color: rgb(2, 158, 80);
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateY(0);
+  }
+}
+
+@keyframes moveInTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateY(0);
+  }
+}
+
+@keyframes moveInCenter {
+  0% {
+    opacity: 0;
+    transform: scale(.7);
+  }
+  100% {
+     opacity: 1;
+     transform: scale(1);
+  }
+}
+
+@keyframes zrr {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+     opacity: 1;
+     transform: scale(1.5);
+  }
+}
+
+.modal-content {
+  background-color: rgb(58, 58, 58);
+  box-shadow: 1px 1px 30px 5px rgba(255,255,255, 1);
+}
+
+#watchyoutube {
+  background-color: red;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.youtube {
+  position: relative;
+}
+
+.trailer {
+  color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: .1s cubic-bezier(1,-0.02,.72,1.98);  
+}
+
+.trailer:hover{
+  transform: translate(-50%, -55%) scale(1.5);
+  visibility: visible;
+  z-index: 10;
+}
+
+
+
