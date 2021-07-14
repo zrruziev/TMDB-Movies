@@ -2,11 +2,14 @@
 const search = document.querySelector('.searchInput'),
       searchBtn = document.querySelector('.searchBtn'),
       form = document.querySelector('#form'),
-      main = document.querySelector('#maindiv'),
+      main = document.querySelector('.main'),
+      loadBtn = document.querySelector('#loadBtn'),
+      loadBtnChild = document.querySelector('#loadBtnChild'),
+      innermain = document.querySelector('#innerMain'),
       movieDetails = document.querySelector('.xxx'),
       api_url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=5d5e916289a1e4966429ff0b018459f3',
       img_path = 'https://image.tmdb.org/t/p/w500',
-      search_api = 'https://api.themoviedb.org/3/search/movie?api_key=5d5e916289a1e4966429ff0b018459f3&query="',
+      search_api = 'https://api.themoviedb.org/3/search/movie?api_key=5d5e916289a1e4966429ff0b018459f3&query=',
       allGenres = [
         {
            "id":28,
@@ -88,11 +91,13 @@ const search = document.querySelector('.searchInput'),
 
 // Get Some Popular Movies
 const getMovies = (url) => {
+  window.sessionStorage.setItem("ds", url[29]);
   fetch(url)
   .then((response) => {
     return response.json();
   })
   .then((myJson) => {
+    window.sessionStorage.setItem("page", parseInt(myJson.page)+1);
     showMovies(myJson.results);
   });
 }
@@ -100,8 +105,16 @@ getMovies(api_url);
 
 // Show Movies
 const showMovies = (movies) => {
-  main.innerHTML = '';
-  movieDetails.innerHTML = '';
+
+  // Check whether Search_API or Discover_API
+  if(window.sessionStorage.getItem("ds") === "s") {
+    let searchPageNum = parseInt(window.sessionStorage.getItem("page"));
+    if(searchPageNum === 2) {
+      innermain.innerHTML = '';
+      movieDetails.innerHTML = '';
+      loadBtnChild.innerHTML = '';
+    }
+  }
 
   // Get Movie From Movies Array
   movies.forEach((movie) => {
@@ -184,7 +197,7 @@ const showMovies = (movies) => {
     }
   
     // Insert Card-info into DOM 
-    movieEl.innerHTML = `
+    movieEl.innerHTML += `
     <div class="card movie m-3 mb-4">
       <img class="card-img-top" src="${fontImg(movie.poster_path)}" alt="${movie.title}">
       <div class="card-img-overlay text-center pt-4">
@@ -194,16 +207,17 @@ const showMovies = (movies) => {
         </div>
         <br>
       <div>
-        <button id="${movie.id}" data-bs-toggle="modal" data-bs-target="#${idx}" class="details btn btn-success p-2 mt-2 fw-bold w-100 view detailsBtn"><h5>View Details</h5></button></div>
+        <button id="${movie.id}" data-bs-toggle="modal" data-bs-target="#${idx}" class="details btn btn-success p-2 mt-2 fw-bold w-100"><h5>View Details</h5></button></div>
       </div>
       <div class="card-body p-1">
         <h5 class="card-title text-truncate text-light">${movie.title}</h5>
         <h6 class="card-subtitle text-muted fw-bold">${movie.release_date.slice(0, 4)}</h6>
       </div>
     </div>`
-    main.appendChild(movieEl);
+    innermain.appendChild(movieEl);
+
     // Insert Modal-info into DOM 
-    details.innerHTML = `
+    details.innerHTML += `
     <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content text-light px-4">
       <div class="modal-header">
@@ -228,6 +242,27 @@ const showMovies = (movies) => {
     movieDetails.appendChild(details);  
   });
 
+  // Create a Load More Button
+  loadBtnChild.innerHTML = `
+  <button class="d-block btn btn-success mx-auto" id="loadMore">Load More
+      </button>`;
+
+  const loadMoreBtn = document.querySelector('#loadMore');
+  loadMoreBtn.addEventListener('click', () => {
+  let pageNum = parseInt(window.sessionStorage.getItem("page"));
+  const pageKey = "&page=" + pageNum;
+  let load_url;
+  if(window.sessionStorage.getItem("ds") === "s") {
+    let searchValueFromSession = window.sessionStorage.getItem("searchValue");
+    load_url = search_api + searchValueFromSession +pageKey;
+  } else {
+    load_url = api_url + pageKey;
+  }
+  getMovies(load_url);
+  pageNum += 1;
+  window.sessionStorage.setItem("page", pageNum);
+})
+
   // Listen to Event For YouTube Trailer
   let ytBtns = document.querySelectorAll('.ytbtn'); 
   let viewBtns = document.querySelectorAll('.details');
@@ -243,16 +278,17 @@ const showMovies = (movies) => {
   });
 }
 
+
 // Listen to Event For Searching Movies
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   const searchTerm = search.value;
   if(searchTerm && searchTerm !== '') {
     getMovies(search_api + searchTerm);
+    window.sessionStorage.setItem("searchValue", searchTerm);
     search.value = '';
   } else {}
 })
-
 
 
 
