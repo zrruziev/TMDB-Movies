@@ -210,7 +210,7 @@ const showMovies = (movies) => {
         </div>
         <br>
       <div>
-        <button id="${movie.id}" data-bs-toggle="modal" data-bs-target="#${idx}" class="details btn btn-success p-2 mt-2 fw-bold w-100"><h5>View Details</h5></button></div>
+        <button id="${movie.id}" data-bs-toggle="modal" data-bs-target="#${idx}" class="details btn btn-success p-2 mt-2 fw-bold w-100 view"><h5>View Details</h5></button></div>
       </div>
       <div class="card-body p-1">
         <h5 class="card-title text-truncate text-light">${movie.title}</h5>
