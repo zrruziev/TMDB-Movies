@@ -88,6 +88,7 @@ const search = document.querySelector('.searchInput'),
            "name":"Western"
         }
       ];
+      
 
 // Get Some Popular Movies
 const getMovies = (url) => {
@@ -102,6 +103,7 @@ const getMovies = (url) => {
   });
 }
 getMovies(api_url);
+
 
 // Show Movies
 const showMovies = (movies) => {
@@ -121,7 +123,7 @@ const showMovies = (movies) => {
     const youtubeUrl = "https://www.youtube.com/watch?v=";
     const trailerUrl = "https://api.themoviedb.org/3/movie/" + movie.id + "/videos?api_key=5d5e916289a1e4966429ff0b018459f3";
     
-    // Get YouTube Trailer_Key
+    // Get YouTube Trailer_Keys.Json File  
     function trailer(url) {
       fetch(url)
       .then((res) => {
@@ -135,19 +137,20 @@ const showMovies = (movies) => {
     trailer(trailerUrl);
 
     // Check whether there is a Trailer_Key
-    const checking = (x) => {
-      if(x.length === 0) {
+    const checking = (videoKey) => {
+      if(videoKey.length === 0) {
         if(movie.poster_path != null) {
           return "img/noVideo.jpg";
         } else {
           return "img/noVideo.jpg";
         }
-      } else if(x.length === 1) {
-          return youtubeUrl + x[0].key;
+      } else if(videoKey.length === 1) {
+          return youtubeUrl + videoKey[0].key;
       } else {
-          return youtubeUrl + x[x.length - 1].key;
+          return youtubeUrl + videoKey[videoKey.length - 1].key;
       }       
     }
+
     // Create Modal Div
     const movieEl = document.createElement('div');
     const idx = "id" + movie.id;
@@ -166,7 +169,7 @@ const showMovies = (movies) => {
     }
 
     // Find movie genres by genre ids
-    const showGenres =(x) => {
+    const showGenres = (x) => {
       let genres='';
       x.genre_ids.forEach((id) => {
         allGenres.forEach((i) => {
@@ -244,26 +247,25 @@ const showMovies = (movies) => {
 
   // Create a Load More Button
   loadBtnChild.innerHTML = `
-  <button class="d-block btn btn-success mx-auto" id="loadMore">Load More
-      </button>`;
+    <button class="d-block btn btn-success mx-auto" id="loadMore">Load More
+    </button>`;
+    const loadMoreBtn = document.querySelector('#loadMore');
+    loadMoreBtn.addEventListener('click', () => {
+      let pageNum = parseInt(window.sessionStorage.getItem("page"));
+      const pageKey = "&page=" + pageNum;
+      let load_url;
+      if(window.sessionStorage.getItem("ds") === "s") {
+        let searchValueFromSession = window.sessionStorage.getItem("searchValue");
+        load_url = search_api + searchValueFromSession +pageKey;
+      } else {
+        load_url = api_url + pageKey;
+      }
+      getMovies(load_url);
+      pageNum += 1;
+      window.sessionStorage.setItem("page", pageNum);
+  })
 
-  const loadMoreBtn = document.querySelector('#loadMore');
-  loadMoreBtn.addEventListener('click', () => {
-  let pageNum = parseInt(window.sessionStorage.getItem("page"));
-  const pageKey = "&page=" + pageNum;
-  let load_url;
-  if(window.sessionStorage.getItem("ds") === "s") {
-    let searchValueFromSession = window.sessionStorage.getItem("searchValue");
-    load_url = search_api + searchValueFromSession +pageKey;
-  } else {
-    load_url = api_url + pageKey;
-  }
-  getMovies(load_url);
-  pageNum += 1;
-  window.sessionStorage.setItem("page", pageNum);
-})
-
-  // Listen to Event For YouTube Trailer
+  // Play The YouTube Trailer
   let ytBtns = document.querySelectorAll('.ytbtn'); 
   let viewBtns = document.querySelectorAll('.details');
   viewBtns.forEach((btn) => {
