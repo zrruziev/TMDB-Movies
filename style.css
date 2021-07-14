@@ -86,19 +86,11 @@ body {
   animation-name: moveInBottom;
   animation-duration: .5s;
 }
-/* .view {
-  box-shadow: .5px .5px 5px .5px rgb(214, 255, 234);
-  background-color: rgb(1, 145, 73);
-} */
 
 .view:hover {
   border-color: transparent;
   box-shadow: 1px 1px 10px 1px rgb(214, 255, 234);
   background-color: rgb(0, 160, 80);
-}
-
-#loadMore {
-  /* box-shadow: .5px .5px 10px .5px rgb(214, 255, 234); */
 }
 
 #loadMore:hover {
