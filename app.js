@@ -198,7 +198,15 @@ const showMovies = (movies) => {
         return "img/noImage.jpg";
       }
     }
-  
+    
+    const movieYear = (year) => {
+      if(year != null) {
+        return year.slice(0, 4);
+      } else {
+        return "unknown";
+      }
+    }
+    
     // Insert Card-info into DOM 
     movieEl.innerHTML += `
     <div class="card movie m-3 mb-4">
@@ -214,7 +222,7 @@ const showMovies = (movies) => {
       </div>
       <div class="card-body p-1">
         <h5 class="card-title text-truncate text-light">${movie.title}</h5>
-        <h6 class="card-subtitle text-muted fw-bold">${movie.release_date.slice(0, 4)}</h6>
+        <h6 class="card-subtitle text-muted fw-bold">${movieYear(movie.release_date)}</h6>
       </div>
     </div>`
     innermain.appendChild(movieEl);
